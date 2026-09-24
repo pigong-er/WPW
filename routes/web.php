@@ -1,18 +1,45 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\AlatOutdoor;
+use App\Http\Controllers\Admin\KatalogController;
+use App\Http\Controllers\AuthController;
 
-// 1. Halaman Frontend
+
+//Route Frontend
+// Menampilkan katalog dari database
 Route::get('/', function () {
-    return view('welcome');
+    $alat = AlatOutdoor::all();
+
+    return view('welcome', compact('alat'));
 });
 
-// 2. Halaman Login
-Route::get('/login', function () {
-    return view('auth.login');
-});
 
-// 3. Halaman Admin Dashboard
-Route::get('/admin', function () {
-    return view('admin.dashboard');
-});
+// Route Login
+// Menampilkan halaman login
+Route::get('/login', [AuthController::class, 'index'])
+    ->name('login');
+
+// Memproses username dan password
+Route::post('/login', [AuthController::class, 'authenticate'])
+    ->name('login.authenticate');
+
+
+// Route Admin Panel
+Route::prefix('admin')
+    ->middleware('auth')
+    ->group(function () {
+
+        // Dashboard admin
+        Route::get('/', function () {
+            return view('admin.dashboard');
+        });
+
+        // CRUD Katalog Alat
+        Route::resource('katalog', KatalogController::class);
+    });
+
+
+// Route Logout
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->name('logout');

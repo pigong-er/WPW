@@ -4,11 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spark Admin - Premium Bootstrap 5 Admin Dashboard Template</title>
+  <title>GongStrak - Premium Bootstrap 5 Admin Dashboard Template</title>
 
   <!-- SEO Optimization -->
-  <meta name="description" content="Spark Admin - Premium Bootstrap 5 Admin Dashboard Template">
-  <meta name="author" content="Spark Admin Team">
+  <meta name="description" content="GongStrak - Premium Bootstrap 5 Admin Dashboard Template">
+  <meta name="author" content="GongStrak Team">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/images/favicon.ico">
@@ -27,17 +27,24 @@
     :root {
         --brown-sidebar: #3E2723;
         --brown-hover: #4E342E;
-        --brown-accent: #D7CCC8;
+        --brown-accent: #D7CCC8; /* Warna Cream */
         --brown-primary: #795548;
     }
 
     /* Sidebar Area */
     .sidebar-wrapper { background-color: var(--brown-sidebar) !important; }
+
     .sidebar-menu-link.active {
         background-color: var(--brown-hover) !important;
         border-left-color: var(--brown-accent) !important;
         color: white !important;
     }
+
+    /* Mengubah warna icon menjadi cream saat menu aktif/dipencet */
+    .sidebar-menu-link.active i {
+        color: var(--brown-accent) !important;
+    }
+
     .sidebar-brand i {
         color: var(--brown-accent) !important;
         animation: none !important;
@@ -57,18 +64,26 @@
     .alert-green-badge { background-color: var(--brown-sidebar) !important; color: white !important;}
     .promo-banner-card { background-color: var(--brown-sidebar) !important; color: white; }
     .btn-promo { background-color: var(--brown-accent) !important; color: var(--brown-sidebar) !important; }
-    /* Tema Brown untuk Tombol Create */
-    .btn-quick-action {
-        background-color: var(--brown-primary) !important;
-        color: white !important;
-        border: none !important;
-    }
 
     .btn-quick-action:hover,
     .btn-quick-action:focus,
     .btn-quick-action[aria-expanded="true"] {
         background-color: var(--brown-hover) !important;
         color: white !important;
+    }
+
+    .navbar-custom {
+        position: relative !important;
+        width: 100% !important;
+    }
+
+    .navbar-actions {
+        position: absolute !important;
+        right: -40px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
   </style>
 </head>
@@ -82,7 +97,7 @@
     <!-- Brand Logo / Identity -->
     <a href="index.html" class="sidebar-brand text-decoration-none">
       <i class="bi bi-shop"></i>
-      <span>Spark Admin</span>
+      <span>GongStrak</span>
     </a>
 
     <!-- Navigation Menu -->
@@ -105,21 +120,9 @@
         <div class="sidebar-menu-title text-light opacity-75">Components</div>
         <ul class="sidebar-menu-list">
           <li class="sidebar-menu-item">
-            <a href="tables-basic.html" class="sidebar-menu-link" id="menu-basictables" title="Basic Tables">
-              <i class="bi bi-table"></i>
-              <span>Basic Tables</span>
-            </a>
-          </li>
-          <li class="sidebar-menu-item">
-            <a href="ui-forms.html" class="sidebar-menu-link" id="menu-uiforms" title="Forms and Input">
-              <i class="bi bi-input-cursor-text"></i>
-              <span>Forms & Input</span>
-            </a>
-          </li>
-          <li class="sidebar-menu-item">
-            <a href="ui-buttons.html" class="sidebar-menu-link" id="menu-uibuttons" title="Buttons">
-              <i class="bi bi-menu-button-wide-fill"></i>
-              <span>Buttons & Alerts</span>
+            <a href="{{ url('/admin/katalog') }}" class="sidebar-menu-link" id="menu-katalog" title="Katalog Alat">
+              <i class="bi bi-box-seam"></i>
+              <span>Katalog Alat</span>
             </a>
           </li>
         </ul>
@@ -129,22 +132,17 @@
       <div class="sidebar-menu-section">
         <div class="sidebar-menu-title text-light opacity-75">Pages</div>
         <ul class="sidebar-menu-list">
+          <!-- Menu Baru: Pengaturan Profil -->
           <li class="sidebar-menu-item">
-            <a href="page-blank.html" class="sidebar-menu-link" id="menu-blankpage" title="Blank Page">
-              <i class="bi bi-file-earmark"></i>
-              <span>Blank Page</span>
+            <a href="{{ url('/admin/pengaturan') }}" class="sidebar-menu-link" id="menu-pengaturan" title="Pengaturan Profil">
+              <i class="bi bi-person-gear"></i>
+              <span>Pengaturan Profil</span>
             </a>
           </li>
           <li class="sidebar-menu-item">
             <a href="{{ url('/login') }}" class="sidebar-menu-link" id="menu-loginpage" title="Login Page">
               <i class="bi bi-box-arrow-in-right"></i>
               <span>Login Screen</span>
-            </a>
-        </li>
-          <li class="sidebar-menu-item">
-            <a href="page-404.html" class="sidebar-menu-link" id="menu-404" title="404 Page">
-              <i class="bi bi-slash-circle"></i>
-              <span>Error 404</span>
             </a>
           </li>
         </ul>
@@ -183,33 +181,6 @@
         <button class="sidebar-toggle-btn me-2" id="sidebar-toggle" aria-label="Toggle Navigation">
           <i class="bi bi-list"></i>
         </button>
-
-        <!-- Quick Actions Dropdown -->
-        <div class="dropdown ms-2">
-          <button class="btn-quick-action dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-            id="quick-actions-dropdown">
-            <i class="bi bi-plus-lg"></i>
-            <span>Create</span>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-quick-action" aria-labelledby="quick-actions-dropdown">
-            <li class="dropdown-header">Quick Action Shortcuts</li>
-            <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-plus"></i> New Invoice</a></li>
-            <li><a class="dropdown-item" href="#"><i class="bi bi-person-plus"></i> New User</a></li>
-            <li><a class="dropdown-item" href="#"><i class="bi bi-box-seam"></i> New Product</a></li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> System Settings</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Mid navbar: search pill -->
-      <div class="navbar-search-wrapper">
-        <input type="text" class="navbar-search-input" placeholder="Search anything in Spark..." id="main-search">
-        <button class="navbar-search-btn" aria-label="Search">
-          <i class="bi bi-search"></i>
-        </button>
       </div>
 
       <!-- Right actions -->
@@ -218,55 +189,6 @@
         <button class="navbar-action-btn me-1" aria-label="Toggle Fullscreen" id="btn-fullscreen">
           <i class="bi bi-arrows-fullscreen"></i>
         </button>
-        <div class="dropdown">
-          <button class="navbar-action-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
-            aria-expanded="false" id="btn-notifications" data-bs-auto-close="outside">
-            <i class="bi bi-bell"></i>
-            <span class="navbar-action-badge"></span>
-          </button>
-          <div class="dropdown-menu dropdown-menu-end dropdown-menu-notification p-0"
-            aria-labelledby="btn-notifications">
-            <div class="notification-header">
-              <h6 class="notification-title">Notifications</h6>
-              <button class="btn-clear-all" type="button">Mark all read</button>
-            </div>
-            <div class="notification-list">
-              <!-- Sale Notification -->
-              <a href="#" class="notification-item">
-                <div class="notification-icon bg-success text-white">
-                  <i class="bi bi-wallet2"></i>
-                </div>
-                <div class="notification-content">
-                  <p class="notification-text">New sale received: <strong>$150.00</strong></p>
-                  <span class="notification-time">2 mins ago</span>
-                </div>
-                <span class="notification-unread-dot"></span>
-              </a>
-              <!-- User Registration Notification -->
-              <a href="#" class="notification-item">
-                <div class="notification-icon bg-primary text-white">
-                  <i class="bi bi-person-plus-fill"></i>
-                </div>
-                <div class="notification-content">
-                  <p class="notification-text">New user registered: <strong>John Doe</strong></p>
-                  <span class="notification-time">1 hour ago</span>
-                </div>
-                <span class="notification-unread-dot"></span>
-              </a>
-              <!-- Low Stock Notification -->
-              <a href="#" class="notification-item">
-                <div class="notification-icon bg-warning text-dark">
-                  <i class="bi bi-box-seam-fill"></i>
-                </div>
-                <div class="notification-content">
-                  <p class="notification-text">Stock running low: <strong>Hoodie</strong></p>
-                  <span class="notification-time">3 hours ago</span>
-                </div>
-              </a>
-            </div>
-            <a href="#" class="notification-footer">View All Notifications</a>
-          </div>
-        </div>
 
         <!-- Profile Dropdown -->
         <div class="dropdown ms-2">
@@ -307,369 +229,34 @@
     </div>
     <!-- END: Dashboard Header Banner -->
 
-    <!-- START: Main Layout Grid (2 Columns: Dashboard + Performance Pane) -->
+    <!-- START: Main Layout Grid (1 Column: Top Dashboard Stat) -->
     <div class="row g-4">
 
       <!-- TOP AREA: Quick Info Stat Cards Row (Full Width) -->
       <div class="col-12">
         <div class="row g-4">
-          <!-- Stat Card 1: Green Alert Banner -->
-          <div class="col-md-4">
-            <div class="card alert-green-card">
-              <div class="position-relative z-index-2">
-                <span class="alert-green-badge">Update</span>
-                <div class="alert-green-date">Feb 14th 2026</div>
-                <div class="alert-green-text">Sales revenue increased 40% in 1 week</div>
-              </div>
-              <a href="#" class="alert-green-link z-index-2" id="alert-link-statistics">
-                <span>See Statistics</span>
-                <i class="bi bi-arrow-right"></i>
-              </a>
 
-              <!-- Inline SVG geometric decoration -->
-              <svg class="alert-green-bg-shape" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g transform="translate(50,50)">
-                  <rect x="-6" y="-45" width="12" height="90" rx="6" ry="6" fill="#D7CCC8" />
-                  <rect x="-6" y="-45" width="12" height="90" rx="6" ry="6" fill="#D7CCC8" transform="rotate(60)" />
-                  <rect x="-6" y="-45" width="12" height="90" rx="6" ry="6" fill="#D7CCC8" transform="rotate(120)" />
-                </g>
-              </svg>
+          <!-- Stat Card 1: Total Web Dilihat -->
+          <div class="col-md-4">
+            <div class="card bg-forest-light border-0 shadow-sm p-4 h-100" style="border-left: 5px solid var(--brown-primary) !important;">
+                <div class="d-flex align-items-center gap-4 h-100">
+                    <div class="bg-white p-3 rounded-circle text-center d-flex align-items-center justify-content-center shadow-sm" style="color: var(--brown-primary); width: 65px; height: 65px;">
+                        <i class="bi bi-eye-fill fs-2"></i>
+                    </div>
+                    <div>
+                        <span class="text-muted small fw-medium text-uppercase">Total Web Dilihat</span>
+                        <h2 class="fw-bold mb-0 text-dark mt-1">1.452 <small class="fs-6 fw-normal text-muted">Kali</small></h2>
+                    </div>
+                </div>
             </div>
           </div>
 
-          <!-- Stat Card 2: Net Income -->
-          <div class="col-md-4">
-            <div class="card card-stat d-flex flex-column justify-content-between">
-              <div>
-                <div class="card-header">
-                  <span class="stat-label">Net Income</span>
-                  <div class="dropdown">
-                    <button class="card-more-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                      aria-label="More Options" id="btn-more-income">
-                      <i class="bi bi-three-dots"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-arrow-repeat"></i> Refresh</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down"></i> Export
-                          Report</a></li>
-                      <li>
-                        <hr class="dropdown-divider">
-                      </li>
-                      <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-eye-slash"></i> Hide Details</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="stat-value">$196.000</div>
-                <div class="trend-badge trend-up">
-                  <i class="bi bi-arrow-up-right"></i>
-                  <span>+35% from last month</span>
-                </div>
-              </div>
-              <div class="sparkline-container sparkline-card-footer">
-                <div id="income-sparkline"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Stat Card 3: Total Return -->
-          <div class="col-md-4">
-            <div class="card card-stat d-flex flex-column justify-content-between">
-              <div>
-                <div class="card-header">
-                  <span class="stat-label">Total Return</span>
-                  <div class="dropdown">
-                    <button class="card-more-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                      aria-label="More Options" id="btn-more-return">
-                      <i class="bi bi-three-dots"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-arrow-repeat"></i> Refresh</a></li>
-                      <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down"></i> Export
-                          Report</a></li>
-                      <li>
-                        <hr class="dropdown-divider">
-                      </li>
-                      <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-eye-slash"></i> Hide Details</a>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="stat-value">$32.000</div>
-                <div class="trend-badge trend-down">
-                  <i class="bi bi-arrow-down-left"></i>
-                  <span>-24% from last month</span>
-                </div>
-              </div>
-              <div class="sparkline-container sparkline-card-footer">
-                <div id="return-sparkline"></div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
       <!-- END: TOP AREA -->
 
-      <!-- LEFT AREA: Primary Dashboard Stats & Tables -->
-      <div class="col-xl-9 col-lg-8">
-
-        <!-- START: Details Area (Transactions + Performance Charts) -->
-        <div class="row g-4">
-          <!-- Column: Revenue Chart (Full Width / Wider) -->
-          <div class="col-12">
-            <div class="card mb-0">
-              <div class="card-header mb-2">
-                <h2 class="card-title">Revenue</h2>
-                <!-- Custom Static Legends -->
-                <div class="d-flex gap-3 align-items-center">
-                  <div class="chart-legend-item">
-                    <span class="legend-dot bg-forest-medium"></span>
-                    <span class="chart-legend-label">Income</span>
-                  </div>
-                  <div class="chart-legend-item">
-                    <span class="legend-dot bg-lime-accent"></span>
-                    <span class="chart-legend-label">Expenses</span>
-                  </div>
-                </div>
-              </div>
-              <div class="d-flex align-items-baseline gap-2 mb-3">
-                <span class="stat-value-amount">$196.000</span>
-                <span class="trend-badge trend-up fs-xs">+35% from last month</span>
-              </div>
-              <div id="revenue-chart"></div>
-            </div>
-          </div>
-
-          <!-- Column: Transaction List -->
-          <div class="col-md-7 d-flex flex-column">
-            <div class="card h-100 flex-grow-1">
-              <div class="card-header">
-                <h2 class="card-title">Transaction</h2>
-                <div class="dropdown">
-                  <button class="card-more-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                    aria-label="More Options" id="btn-more-transaction">
-                    <i class="bi bi-three-dots"></i>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-funnel"></i> Filter Status</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-arrow-down"></i> Export CSV</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <!-- Transaction Items List -->
-              <div class="transaction-list">
-                <div class="transaction-item">
-                  <div class="transaction-icon bg-forest-light text-lime">
-                    <i class="bi bi-spotify"></i>
-                  </div>
-                  <div class="transaction-info">
-                    <div class="transaction-name">Spotify Subscription</div>
-                    <div class="transaction-date">Feb 14, 2026 • 12:40 PM</div>
-                  </div>
-                  <div class="transaction-amount text-main">-$15.00</div>
-                </div>
-
-                <div class="transaction-item">
-                  <div class="transaction-icon bg-forest-light text-lime">
-                    <i class="bi bi-paypal"></i>
-                  </div>
-                  <div class="transaction-info">
-                    <div class="transaction-name">Paypal Transfer</div>
-                    <div class="transaction-date">Feb 13, 2026 • 08:15 AM</div>
-                  </div>
-                  <div class="transaction-amount text-success">+$1,250.00</div>
-                </div>
-
-                <div class="transaction-item">
-                  <div class="transaction-icon bg-forest-light text-lime">
-                    <i class="bi bi-stripe"></i>
-                  </div>
-                  <div class="transaction-info">
-                    <div class="transaction-name">Stripe Payout</div>
-                    <div class="transaction-date">Feb 11, 2026 • 04:30 PM</div>
-                  </div>
-                  <div class="transaction-amount text-success">+$3,400.00</div>
-                </div>
-
-                <div class="transaction-item">
-                  <div class="transaction-icon bg-forest-light text-lime">
-                    <i class="bi bi-slack"></i>
-                  </div>
-                  <div class="transaction-info">
-                    <div class="transaction-name">Slack Pro Workspace</div>
-                    <div class="transaction-date">Feb 09, 2026 • 09:20 AM</div>
-                  </div>
-                  <div class="transaction-amount text-main">-$45.00</div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Column: Product Overview Progress -->
-          <div class="col-md-5 d-flex flex-column">
-            <div class="card h-100 flex-grow-1">
-              <div class="card-header">
-                <h2 class="card-title">Product Overview</h2>
-                <div class="dropdown">
-                  <button class="card-more-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                    aria-label="More Options" id="btn-more-products">
-                    <i class="bi bi-three-dots"></i>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom">
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-plus-lg"></i> Add Product</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Manage</a></li>
-                  </ul>
-                </div>
-              </div>
-
-              <div class="progress-container">
-                <div class="progress-label-row">
-                  <span class="progress-label">Product Launched</span>
-                  <span class="progress-value">233</span>
-                </div>
-                <div class="progress" role="progressbar" aria-label="Product Launched Progress" aria-valuenow="65"
-                  aria-valuemin="0" aria-valuemax="100">
-                  <div class="progress-bar bg-lime-accent w-65"></div>
-                </div>
-              </div>
-
-              <div class="progress-container">
-                <div class="progress-label-row">
-                  <span class="progress-label">Ongoing Product</span>
-                  <span class="progress-value">23</span>
-                </div>
-                <div class="progress" role="progressbar" aria-label="Ongoing Product Progress" aria-valuenow="20"
-                  aria-valuemin="0" aria-valuemax="100">
-                  <div class="progress-bar bg-lime-accent opacity-50 w-50"></div>
-                </div>
-              </div>
-
-              <div class="progress-container">
-                <div class="progress-label-row">
-                  <span class="progress-label">Product Sold</span>
-                  <span class="progress-value">482</span>
-                </div>
-                <div class="progress" role="progressbar" aria-label="Product Sold Progress" aria-valuenow="85"
-                  aria-valuemin="0" aria-valuemax="100">
-                  <div class="progress-bar bg-lime-accent w-85"></div>
-                </div>
-              </div>
-
-              <div class="progress-container">
-                <div class="progress-label-row">
-                  <span class="progress-label">Product Returned</span>
-                  <span class="progress-value">8</span>
-                </div>
-                <div class="progress" role="progressbar" aria-label="Product Returned Progress" aria-valuenow="10"
-                  aria-valuemin="0" aria-valuemax="100">
-                  <div class="progress-bar bg-brand-orange w-38"></div>
-                </div>
-              </div>
-
-              <div class="progress-container">
-                <div class="progress-label-row">
-                  <span class="progress-label">Product In Stock</span>
-                  <span class="progress-value">1,420</span>
-                </div>
-                <div class="progress" role="progressbar" aria-label="Product In Stock Progress" aria-valuenow="75"
-                  aria-valuemin="0" aria-valuemax="100">
-                  <div class="progress-bar bg-lime-accent w-75"></div>
-                </div>
-              </div>
-
-              <div class="progress-container">
-                <div class="progress-label-row">
-                  <span class="progress-label">Pending Shipment</span>
-                  <span class="progress-value">64</span>
-                </div>
-                <div class="progress" role="progressbar" aria-label="Pending Shipment Progress" aria-valuenow="45"
-                  aria-valuemin="0" aria-valuemax="100">
-                  <div class="progress-bar bg-lime-accent opacity-50 w-45"></div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-        <!-- END: Details Area -->
-
-      </div>
-
-      <!-- RIGHT AREA: Performance Details Sidebar Panel -->
-      <div class="col-xl-3 col-lg-4">
-        <div class="right-panel-wrapper d-flex flex-column gap-4 h-100">
-
-          <!-- Performance Donut Chart card -->
-          <div class="card flex-grow-1 d-flex flex-column justify-content-between mb-0">
-            <div class="card-header mb-1">
-              <h2 class="card-title">Total View Performance</h2>
-            </div>
-
-            <div id="views-chart"></div>
-
-            <!-- Custom Legends below the chart -->
-            <div class="chart-legends-container">
-              <div class="chart-legend-item">
-                <span class="legend-dot bg-lime-accent"></span>
-                <span class="text-muted-green">View Count</span>
-              </div>
-              <div class="chart-legend-item">
-                <span class="legend-dot bg-forest-medium"></span>
-                <span class="text-muted-green">Percentage</span>
-              </div>
-              <div class="chart-legend-item">
-                <span class="legend-dot bg-brand-orange"></span>
-                <span class="text-muted-green">Sales</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Level Up Promotion CTA banner -->
-          <div class="promo-banner-card">
-            <!-- Inline SVG geometric decoration -->
-            <svg class="promo-banner-bg-shape" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g transform="translate(50,50)">
-                <rect x="-6" y="-45" width="12" height="90" rx="6" ry="6" fill="#D7CCC8" />
-                <rect x="-6" y="-45" width="12" height="90" rx="6" ry="6" fill="#D7CCC8" transform="rotate(60)" />
-                <rect x="-6" y="-45" width="12" height="90" rx="6" ry="6" fill="#D7CCC8" transform="rotate(120)" />
-              </g>
-            </svg>
-
-            <h3 class="promo-title">Level up your sales managing to the next level.</h3>
-            <p class="promo-desc">An easy way to manage sales with care and precision.</p>
-            <button class="btn-promo" id="btn-promo-action">Check the updates now</button>
-          </div>
-        </div>
-      </div>
-      <!-- END: RIGHT AREA -->
-
     </div>
     <!-- END: Main Layout Grid -->
-
-    <!-- START: Footer Component -->
-    <footer class="footer-custom">
-      <div class="footer-left">
-        <span class="footer-logo">
-          <i class="bi bi-shop"></i> Spark Admin
-        </span>
-        <span class="footer-separator">|</span>
-        <span class="footer-copy">&copy; 2026 Made with <i class="bi bi-heart-fill text-danger footer-heart"></i> by<a
-            href="https://sparkadminpro.gumroad.com/" target="_blank">Spark Admin</a>• Distributed by <a
-            href="https://www.themewagon.com/" target="_blank">ThemeWagon</a> </span>
-      </div>
-      <div class="footer-right">
-        <ul class="footer-links">
-          <li><a href="#" class="footer-link">Overview</a></li>
-          <li><a href="#" class="footer-link">Statistics</a></li>
-          <li><a href="#" class="footer-link">Help & Documentation</a></li>
-          <li><a href="#" class="footer-link">Status <span class="status-dot"></span></a></li>
-        </ul>
-      </div>
-    </footer>
-    <!-- END: Footer Component -->
 
   </div>
   <!-- ==========================================
