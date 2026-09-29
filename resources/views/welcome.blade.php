@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sewa Alat Outdoor - GongStrak</title>
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/logo/lg.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
@@ -48,7 +48,13 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top shadow-sm py-3">
         <div class="container">
             <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
-                <div class="text-success fs-4"><i class="bi bi-tree-fill"></i></div>
+                <img
+                    src="{{ asset('assets/logo/lg.png') }}"
+                    alt="Logo GongStrak"
+                    width="55"
+                    height=55"
+                    style="object-fit: contain;"
+                >
                 <span>GongStrak Outdoor</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -74,7 +80,7 @@
                 Sewa Alat Outdoor <span class="text-success">Cepat & Terjangkau</span>
             </h1>
             <p class="lead text-secondary mb-4 mx-auto" style="max-width: 600px;">
-                Lengkapi kebutuhan petualangan Anda dengan peralatan camping dan hiking berkualitas tinggi.
+                Lengkapi kebutuhan petualangan anda dengan peralatan outdor berkualitas tinggi.
             </p>
             <a href="#katalog" class="btn btn-success btn-lg rounded-pill px-5">
                 Lihat Katalog Alat <i class="bi bi-arrow-down ms-2"></i>

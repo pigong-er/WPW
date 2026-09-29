@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - GongStrak</title>
 
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.ico') }}">
-
+    <link rel="icon" type="image/png" href="{{ asset('assets/logo/lg.png') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/bootstrap-icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 
     <style>
-        /* TEMA BROWN UNTUK LOGIN */
+        /* TEMA BROWN */
         .login-bg-shape-1,
         .login-bg-shape-2 {
             background: linear-gradient(135deg, #8D6E63, #D7CCC8) !important;
@@ -53,6 +52,13 @@
             color: #5D4037 !important;
             font-weight: bold;
         }
+
+        .login-brand-logo {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+            display: block;
+        }
     </style>
 </head>
 
@@ -65,8 +71,12 @@
 
         <div class="login-card">
 
-            <a href="{{ url('/') }}" class="login-brand text-decoration-none">
-                <i class="bi bi-tree-fill"></i>
+            <a href="{{ url('/') }}" class="login-brand text-decoration-none d-flex align-items-center gap-2">
+                <img
+                    src="{{ asset('assets/logo/lg.png') }}"
+                    alt="Logo GongStrak"
+                    class="login-brand-logo"
+                >
                 <span>GongStrak</span>
             </a>
 

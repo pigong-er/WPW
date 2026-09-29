@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -10,52 +11,96 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
-    // Menampilkan halaman pengaturan
+    /**
+     * Menampilkan halaman pengaturan profil
+     */
     public function index()
     {
-        // Mengambil data user yang sedang login
-        $user = Auth::user();
+        $user = User::findOrFail(Auth::id());
+
         return view('admin.pengaturan', compact('user'));
     }
 
-    // Memproses update data ke database
+    /**
+     * Menyimpan perubahan profil
+     */
     public function update(Request $request)
     {
-        $user = Auth::user(); // Ambil data user yang sedang login
+        $user = User::findOrFail(Auth::id());
 
-        // 1. Validasi Input
+        // Validasi
         $request->validate([
-            'nama'                  => 'required|string|max:255',
-            // Username harus unik, kecuali milik user itu sendiri
-            'username'              => 'required|string|max:255|unique:users,username,' . $user->id,
-            'password'              => 'nullable|min:6|confirmed', // 'confirmed' berarti harus sama dengan 'password_confirmation'
-            'foto_profil'           => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'nama' => [
+                'required',
+                'string',
+                'max:255'
+            ],
+
+            'username' => [
+                'required',
+                'string',
+                'max:255',
+                'unique:users,username,' . $user->id
+            ],
+
+            'password' => [
+                'nullable',
+                'string',
+                'min:6',
+                'confirmed'
+            ],
+
+            'foto_profil' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png',
+                'max:2048'
+            ],
+        ], [
+            'nama.required' => 'Nama wajib diisi.',
+
+            'username.required' => 'Username wajib diisi.',
+            'username.unique' => 'Username sudah digunakan.',
+
+            'password.min' => 'Password minimal 6 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak sama.',
+
+            'foto_profil.image' => 'File harus berupa gambar.',
+            'foto_profil.mimes' => 'Foto harus JPG, JPEG, atau PNG.',
+            'foto_profil.max' => 'Ukuran foto maksimal 2MB.',
         ]);
 
-        // 2. Update Nama dan Username
-        // (Pastikan kolom 'nama' di database Anda namanya 'name' atau sesuaikan dengan struktur DB Anda)
+        // Update nama
         $user->name = $request->nama;
+
+        // Update username
         $user->username = $request->username;
 
-        // 3. Update Password (Hanya jika diisi)
+        // Update password hanya kalau diisi
         if ($request->filled('password')) {
             $user->password = Hash::make($request->password);
         }
 
-        // 4. Update Foto Profil (Jika ada file yang diunggah)
+        // Upload foto profil
         if ($request->hasFile('foto_profil')) {
-            // Hapus foto lama jika ada
+
+            // Hapus foto lama
             if ($user->foto_profil) {
-                Storage::delete('public/' . $user->foto_profil);
+                Storage::disk('public')->delete($user->foto_profil);
             }
+
             // Simpan foto baru
-            $path = $request->file('foto_profil')->store('public/foto_profil');
-            $user->foto_profil = str_replace('public/', '', $path);
+            $path = $request->file('foto_profil')
+                ->store('foto_profil', 'public');
+
+            $user->foto_profil = $path;
         }
 
-        // 5. Simpan semua perubahan ke database
+        // Simpan ke database
         $user->save();
 
-        return redirect()->back()->with('success', 'Profil dan keamanan akun berhasil diperbarui!');
+        return redirect()
+            ->route('admin.pengaturan')
+            ->with('success', 'Profil berhasil diperbarui!');
     }
 }

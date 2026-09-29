@@ -10,11 +10,11 @@
   <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 
   <style>
-    /* TEMA BROWN UNTUK DASHBOARD ADMIN */
+    /* TEMA BROWN */
     :root {
         --brown-sidebar: #3E2723;
         --brown-hover: #4E342E;
-        --brown-accent: #D7CCC8; /* Cream */
+        --brown-accent: #D7CCC8;
         --brown-primary: #795548;
     }
 
@@ -125,8 +125,8 @@
         opacity: .6;
     }
 
-    .btn-action-edit { background-color: #ffc107; color: #fff; border: none; font-size: 0.85rem; padding: 6px 11px; border-radius: 7px; }
-    .btn-action-edit:hover { background-color: #e0a800; color: #fff; }
+    .btn-action-edit { background-color: #795548; color: #fff; border: none; font-size: 0.85rem; padding: 6px 11px; border-radius: 7px; }
+    .btn-action-edit:hover { background-color: #795548; color: #fff; }
     .btn-action-delete { background-color: #dc3545; color: #fff; border: none; font-size: 0.85rem; padding: 6px 11px; border-radius: 7px; }
     .btn-action-delete:hover { background-color: #c82333; color: #fff; }
 
@@ -152,17 +152,34 @@
             justify-content: center;
         }
     }
+
+    .sidebar-logo {
+        width: 42px;
+        height: 42px;
+        object-fit: contain;
+        flex-shrink: 0;
+    }
   </style>
 </head>
 
 <body>
+
+  @php
+      $user = auth()->user();
+  @endphp
+
   <!-- ==========================================
          START: Sidebar Component
          ========================================== -->
   <div class="sidebar-wrapper" id="sidebar">
-    <a href="{{ url('/admin') }}" class="sidebar-brand text-decoration-none">
-      <i class="bi bi-shop"></i>
-      <span>GongStrak</span>
+    <a href="{{ url('/admin') }}"
+        class="sidebar-brand text-decoration-none d-flex align-items-center">
+        <img
+            src="{{ asset('assets/logo/lg.png') }}"
+            alt="Logo GongStrak"
+            class="sidebar-logo"
+        >
+        <span>GongStrak</span>
     </a>
 
     <div class="flex-grow-1 overflow-y-auto">
@@ -196,7 +213,7 @@
           <li class="sidebar-menu-item">
             <a href="{{ url('/admin/pengaturan') }}" class="sidebar-menu-link" title="Pengaturan Profil">
               <i class="bi bi-person-gear"></i>
-              <span>Pengaturan Profil</span>
+              <span>Pengaturan</span>
             </a>
           </li>
           <li class="sidebar-menu-item">
@@ -211,11 +228,25 @@
 
         <!-- Sidebar Profile Card (Dynamic Footer) -->
     <div class="sidebar-profile">
-      <img src="assets/images/profile.jpg" alt="Administrator" class="sidebar-profile-img"
-        onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop'">
+      @if($user && $user->foto_profil)
+        <img
+          src="{{ asset('storage/' . $user->foto_profil) }}"
+          alt="Profile"
+          class="sidebar-profile-img">
+      @else
+        <img
+          src="{{ asset('assets/images/profile.jpg') }}"
+          alt="Profile"
+          class="sidebar-profile-img">
+      @endif
+
       <div class="sidebar-profile-info">
-        <div class="sidebar-profile-name">Administrator</div>
-        <div class="sidebar-profile-email">admin@email.com</div>
+        <div class="sidebar-profile-name text-truncate">
+          {{ $user->name ?? 'Administrator' }}
+        </div>
+        <div class="sidebar-profile-email text-truncate">
+          {{ $user->username ?? 'admin' }}
+        </div>
       </div>
     </div>
   </div>
@@ -258,8 +289,20 @@
         <div class="dropdown ms-2">
           <button class="navbar-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
             aria-expanded="false" id="profile-dropdown">
-            <img src="assets/images/avatar.png" alt="Profile Image" class="navbar-profile-img" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop'">
-            <span class="navbar-profile-name d-none d-md-inline">Administrator</span>
+            @if($user && $user->foto_profil)
+              <img
+                src="{{ asset('storage/' . $user->foto_profil) }}"
+                alt="Profile Image"
+                class="navbar-profile-img">
+            @else
+              <img
+                src="{{ asset('assets/images/profile.jpg') }}"
+                alt="Profile Image"
+                class="navbar-profile-img">
+            @endif
+            <span class="navbar-profile-name d-none d-md-inline">
+              {{ $user->name ?? 'Administrator' }}
+            </span>
             <i class="bi bi-chevron-down navbar-profile-caret"></i>
           </button>
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-profile" aria-labelledby="profile-dropdown">
@@ -291,7 +334,7 @@
         <div class="catalog-header">
           <h4 class="catalog-title">Data Produk</h4>
 
-          <button id="addProductButton" class="btn btn-primary catalog-add-btn" style="background-color: #0d6efd; border: none;" data-bs-toggle="modal" data-bs-target="#modalTambah">
+          <button id="addProductButton" class="btn btn-primary catalog-add-btn" style="background-color: #4E342E; border: none;" data-bs-toggle="modal" data-bs-target="#modalTambah">
             <i class="bi bi-plus-lg"></i> Tambah
           </button>
         </div>

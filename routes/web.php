@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\AlatOutdoor;
 use App\Http\Controllers\Admin\KatalogController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\AuthController;
 
 
@@ -37,6 +38,14 @@ Route::prefix('admin')
 
         // CRUD Katalog Alat
         Route::resource('katalog', KatalogController::class);
+
+        // pengaturan
+        Route::get('/pengaturan', [ProfileController::class, 'index'])
+            ->name('admin.pengaturan');
+
+        Route::put('/pengaturan', [ProfileController::class, 'update'])
+            ->name('admin.pengaturan.update');
+
     });
 
 

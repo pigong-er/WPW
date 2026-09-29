@@ -10,8 +10,8 @@
   <meta name="description" content="GongStrak - Premium Bootstrap 5 Admin Dashboard Template">
   <meta name="author" content="GongStrak Team">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="assets/images/favicon.ico">
+  <!-- logo -->
+  <link rel="icon" type="image/png" href="assets/logo/lg.png">
 
   <!-- Local Third-Party Libraries (100% Offline Compatible) -->
   <link rel="stylesheet" href="assets/libs/bootstrap/css/bootstrap.min.css">
@@ -23,11 +23,11 @@
   <link rel="stylesheet" href="assets/css/main.css">
 
   <style>
-    /* TEMA BROWN UNTUK DASHBOARD ADMIN */
+    /* TEMA BROWN */
     :root {
         --brown-sidebar: #3E2723;
         --brown-hover: #4E342E;
-        --brown-accent: #D7CCC8; /* Warna Cream */
+        --brown-accent: #D7CCC8;
         --brown-primary: #795548;
     }
 
@@ -85,21 +85,37 @@
         margin: 0 !important;
         padding: 0 !important;
     }
+
+    .sidebar-logo {
+        width: 42px;
+        height: 42px;
+        object-fit: contain;
+        flex-shrink: 0;
+    }
   </style>
 </head>
 
 <body>
 
+  @php
+      $user = auth()->user();
+  @endphp
+
+
   <!-- ==========================================
          START: Sidebar Component
          ========================================== -->
   <div class="sidebar-wrapper" id="sidebar">
-    <!-- Brand Logo / Identity -->
-    <a href="index.html" class="sidebar-brand text-decoration-none">
-      <i class="bi bi-shop"></i>
-      <span>GongStrak</span>
+    <!-- Logo -->
+    <a href="{{ url('/admin') }}"
+        class="sidebar-brand text-decoration-none d-flex align-items-center">
+        <img
+            src="{{ asset('assets/logo/lg.png') }}"
+            alt="Logo GongStrak"
+            class="sidebar-logo"
+        >
+        <span>GongStrak</span>
     </a>
-
     <!-- Navigation Menu -->
     <div class="flex-grow-1 overflow-y-auto">
       <!-- Group: Menu -->
@@ -136,7 +152,7 @@
           <li class="sidebar-menu-item">
             <a href="{{ url('/admin/pengaturan') }}" class="sidebar-menu-link" id="menu-pengaturan" title="Pengaturan Profil">
               <i class="bi bi-person-gear"></i>
-              <span>Pengaturan Profil</span>
+              <span>Pengaturan</span>
             </a>
           </li>
           <li class="sidebar-menu-item">
@@ -151,22 +167,36 @@
 
     <!-- Sidebar Profile Card (Dynamic Footer) -->
     <div class="sidebar-profile">
-      <img src="assets/images/avatar.png" alt="Administrator" class="sidebar-profile-img"
-        onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop'">
+      @if($user && $user->foto_profil)
+        <img
+          src="{{ asset('storage/' . $user->foto_profil) }}"
+          alt="Profile"
+          class="sidebar-profile-img">
+      @else
+        <img
+          src="{{ asset('assets/images/profile.jpg') }}"
+          alt="Profile"
+          class="sidebar-profile-img">
+      @endif
+
       <div class="sidebar-profile-info">
-        <div class="sidebar-profile-name">Administrator</div>
-        <div class="sidebar-profile-email">admin@email.com</div>
+        <div class="sidebar-profile-name text-truncate">
+          {{ $user->name ?? 'Administrator' }}
+        </div>
+        <div class="sidebar-profile-email text-truncate">
+          {{ $user->username ?? 'admin' }}
+        </div>
       </div>
     </div>
   </div>
   <!-- ==========================================
-         END: Sidebar Component
-         ========================================== -->
+        END: Sidebar Component
+        ========================================== -->
 
 
   <!-- ==========================================
-         START: Main Content Area
-         ========================================== -->
+        START: Main Content Area
+        ========================================== -->
   <div class="main-wrapper">
 
     <!-- START: Top Navbar Component -->
@@ -194,8 +224,20 @@
         <div class="dropdown ms-2">
           <button class="navbar-profile-btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
             aria-expanded="false" id="profile-dropdown">
-            <img src="assets/images/avatar.png" alt="Profile Image" class="navbar-profile-img">
-            <span class="navbar-profile-name d-none d-md-inline">Administrator</span>
+            @if($user && $user->foto_profil)
+              <img
+                src="{{ asset('storage/' . $user->foto_profil) }}"
+                alt="Profile Image"
+                class="navbar-profile-img">
+            @else
+              <img
+                src="{{ asset('assets/images/profile.jpg') }}"
+                alt="Profile Image"
+                class="navbar-profile-img">
+            @endif
+            <span class="navbar-profile-name d-none d-md-inline">
+              {{ $user->name ?? 'Administrator' }}
+            </span>
             <i class="bi bi-chevron-down navbar-profile-caret"></i>
           </button>
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-profile" aria-labelledby="profile-dropdown">
