@@ -4,51 +4,57 @@ use Illuminate\Support\Facades\Route;
 use App\Models\AlatOutdoor;
 use App\Http\Controllers\Admin\KatalogController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\KasirController;
 use App\Http\Controllers\AuthController;
 
 
-//Route Frontend
-// Menampilkan katalog dari database
+// ============================================
+// ROUTE FRONTEND (Halaman Publik)
+// ============================================
 Route::get('/', function () {
-    $alat = AlatOutdoor::all();
-
+    $alat = AlatOutdoor::where('is_active', 1)->get(); // hanya tampil yang aktif
     return view('welcome', compact('alat'));
-});
+})->name('home');
 
 
-// Route Login
-// Menampilkan halaman login
-Route::get('/login', [AuthController::class, 'index'])
-    ->name('login');
-
-// Memproses username dan password
-Route::post('/login', [AuthController::class, 'authenticate'])
-    ->name('login.authenticate');
+// ============================================
+// ROUTE LOGIN
+// ============================================
+Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
 
 
-// Route Admin Panel
+// ============================================
+// ROUTE ADMIN PANEL (Wajib Login)
+// ============================================
 Route::prefix('admin')
     ->middleware('auth')
+    ->name('admin.')
     ->group(function () {
 
-        // Dashboard admin
+        // ---------- Dashboard ----------
         Route::get('/', function () {
             return view('admin.dashboard');
-        });
+        })->name('dashboard');
 
-        // CRUD Katalog Alat
+        // ---------- CRUD Katalog Alat ----------
         Route::resource('katalog', KatalogController::class);
 
-        // pengaturan
-        Route::get('/pengaturan', [ProfileController::class, 'index'])
-            ->name('admin.pengaturan');
+        // ---------- KASIR SEWA ----------
+        Route::prefix('kasir')->name('kasir')->group(function () {
+            Route::get('/', [KasirController::class, 'index'])->name('');            // admin.kasir
+            Route::post('/store', [KasirController::class, 'store'])->name('.store'); // admin.kasir.store
+            Route::get('/nota/{id}', [KasirController::class, 'nota'])->name('.nota'); // admin.kasir.nota
+        });
 
-        Route::put('/pengaturan', [ProfileController::class, 'update'])
-            ->name('admin.pengaturan.update');
+        // ---------- Pengaturan Profil ----------
+        Route::get('/pengaturan', [ProfileController::class, 'index'])->name('pengaturan');
+        Route::put('/pengaturan', [ProfileController::class, 'update'])->name('pengaturan.update');
 
     });
 
 
-// Route Logout
-Route::post('/logout', [AuthController::class, 'logout'])
-    ->name('logout');
+// ============================================
+// ROUTE LOGOUT
+// ============================================
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

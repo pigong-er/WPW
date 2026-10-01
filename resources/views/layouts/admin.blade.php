@@ -131,7 +131,7 @@
         </ul>
       </div>
 
-      <!-- Group: Components -->
+        <!-- Group: Components -->
       <div class="sidebar-menu-section">
         <div class="sidebar-menu-title text-light opacity-75">Components</div>
         <ul class="sidebar-menu-list">
@@ -139,6 +139,13 @@
             <a href="{{ url('/admin/katalog') }}" class="sidebar-menu-link" id="menu-katalog" title="Katalog Alat">
               <i class="bi bi-box-seam"></i>
               <span>Katalog Alat</span>
+            </a>
+          </li>
+        <!-- MENU BARU: TRANSAKSI KASIR -->
+          <li class="sidebar-menu-item">
+            <a href="{{ url('/admin/kasir') }}" class="sidebar-menu-link" id="menu-kasir" title="Transaksi Kasir">
+              <i class="bi bi-cart-check"></i>
+              <span>Transaksi Kasir</span>
             </a>
           </li>
         </ul>

@@ -204,6 +204,14 @@
               <span>Katalog Alat</span>
             </a>
           </li>
+
+          <!-- MENU BARU: TRANSAKSI KASIR -->
+          <li class="sidebar-menu-item">
+            <a href="{{ url('/admin/kasir') }}" class="sidebar-menu-link" id="menu-kasir" title="Transaksi Kasir">
+              <i class="bi bi-cart-check"></i>
+              <span>Transaksi Kasir</span>
+            </a>
+          </li>
         </ul>
       </div>
 
@@ -385,7 +393,7 @@
                     <button class="btn btn-action-edit rounded" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $item->id }}">
                       <i class="bi bi-pencil-square"></i> Edit
                     </button>
-                    <form action="{{ route('katalog.destroy', $item->id) }}" method="POST" class="d-inline">
+                    <form action="{{ route('admin.katalog.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-action-delete rounded" onclick="return confirm('Yakin ingin menghapus alat ini?')">
@@ -404,7 +412,7 @@
                       <h5 class="modal-title fw-bold">Edit Data Alat</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
-                    <form action="{{ route('katalog.update', $item->id) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.katalog.update', $item->id) }}" method="POST" enctype="multipart/form-data">
                       @csrf
                       @method('PUT')
                       <div class="modal-body text-start">
@@ -469,7 +477,7 @@
           <h5 class="modal-title fw-bold">Tambah Alat Baru</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <form action="{{ route('katalog.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.katalog.store') }}" method="POST" enctype="multipart/form-data">
           @csrf
           <div class="modal-body text-start">
             <div class="mb-3">
