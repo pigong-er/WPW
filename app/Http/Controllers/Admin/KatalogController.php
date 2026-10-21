@@ -7,6 +7,8 @@ use App\Models\AlatOutdoor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class KatalogController extends Controller
 {
@@ -31,8 +33,23 @@ class KatalogController extends Controller
 
         $fotoPath = null;
         if ($request->hasFile('foto_alat')) {
-            // DISINI PERUBAHANNYA: Langsung simpan ke folder 'foto_alat' dengan disk 'public'
-            $fotoPath = $request->file('foto_alat')->store('foto_alat', 'public');
+            $file = $request->file('foto_alat');
+            $original = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $ext = strtolower($file->getClientOriginalExtension());
+            $filename = time() . '_' . preg_replace('/[^A-Za-z0-9\-_]/', '', $original) . '.' . $ext;
+            $path = 'foto_alat/' . $filename;
+
+            $manager = new ImageManager(Driver::class);
+            $image = $manager->decodePath($file->getRealPath())->cover(800, 800);
+
+            if ($ext === 'png') {
+                $encoded = $image->encodeUsingFileExtension('png', quality: 90);
+            } else {
+                $encoded = $image->encodeUsingFileExtension('jpg', quality: 85);
+            }
+
+            Storage::disk('public')->put($path, $encoded->toString());
+            $fotoPath = $path;
         }
 
         AlatOutdoor::create([
@@ -62,8 +79,24 @@ class KatalogController extends Controller
                 // Hapus foto lama di disk public
                 Storage::disk('public')->delete($alat->foto_alat);
             }
-            // DISINI PERUBAHANNYA: Simpan foto baru ke disk 'public'
-            $alat->foto_alat = $request->file('foto_alat')->store('foto_alat', 'public');
+
+            $file = $request->file('foto_alat');
+            $original = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $ext = strtolower($file->getClientOriginalExtension());
+            $filename = time() . '_' . preg_replace('/[^A-Za-z0-9\-_]/', '', $original) . '.' . $ext;
+            $path = 'foto_alat/' . $filename;
+
+            $manager = new ImageManager(Driver::class);
+            $image = $manager->decodePath($file->getRealPath())->cover(800, 800);
+
+            if ($ext === 'png') {
+                $encoded = $image->encodeUsingFileExtension('png', quality: 90);
+            } else {
+                $encoded = $image->encodeUsingFileExtension('jpg', quality: 85);
+            }
+
+            Storage::disk('public')->put($path, $encoded->toString());
+            $alat->foto_alat = $path;
         }
 
         $alat->update([
@@ -79,65 +112,65 @@ class KatalogController extends Controller
 
     public function destroy($id)
     {
-    // Proses hapus dan pengurutan ID
-    DB::transaction(function () use ($id) {
+        // Proses hapus dan pengurutan ID
+        DB::transaction(function () use ($id) {
 
-        // Cari data yang akan dihapus
-        $alat = AlatOutdoor::findOrFail($id);
+            // Cari data yang akan dihapus
+            $alat = AlatOutdoor::findOrFail($id);
 
-        // Hapus foto jika ada
-        if ($alat->foto_alat) {
-            Storage::disk('public')->delete($alat->foto_alat);
-        }
+            // Hapus foto jika ada
+            if ($alat->foto_alat) {
+                Storage::disk('public')->delete($alat->foto_alat);
+            }
 
-        // Hapus data
-        $alat->delete();
+            // Hapus data
+            $alat->delete();
 
-        // Ambil semua data yang tersisa
-        $data = AlatOutdoor::orderBy('created_at', 'asc')
-            ->orderBy('id', 'asc')
-            ->get();
+            // Ambil semua data yang tersisa
+            $data = AlatOutdoor::orderBy('created_at', 'asc')
+                ->orderBy('id', 'asc')
+                ->get();
 
+            $table = (new AlatOutdoor)->getTable();
+
+            // ID sementara agar tidak bentrok
+            $maxId = DB::table($table)->max('id') ?? 0;
+            $offset = $maxId + 1000;
+
+            // Pindahkan ID ke nomor sementara
+            foreach ($data as $item) {
+                DB::table($table)
+                    ->where('id', $item->id)
+                    ->update([
+                        'id' => $item->id + $offset
+                    ]);
+            }
+
+            // Susun ulang ID menjadi 1, 2, 3, dst.
+            $nomor = 1;
+
+            foreach ($data as $item) {
+                DB::table($table)
+                    ->where('id', $item->id + $offset)
+                    ->update([
+                        'id' => $nomor
+                    ]);
+
+                $nomor++;
+            }
+        });
+
+        // ALTER TABLE diletakkan DI LUAR transaction
         $table = (new AlatOutdoor)->getTable();
 
-        // ID sementara agar tidak bentrok
-        $maxId = DB::table($table)->max('id') ?? 0;
-        $offset = $maxId + 1000;
+        $nomor = AlatOutdoor::count() + 1;
 
-        // Pindahkan ID ke nomor sementara
-        foreach ($data as $item) {
-            DB::table($table)
-                ->where('id', $item->id)
-                ->update([
-                    'id' => $item->id + $offset
-                ]);
-        }
+        DB::statement(
+            'ALTER TABLE ' . $table . ' AUTO_INCREMENT = ' . $nomor
+        );
 
-        // Susun ulang ID menjadi 1, 2, 3, dst.
-        $nomor = 1;
-
-        foreach ($data as $item) {
-            DB::table($table)
-                ->where('id', $item->id + $offset)
-                ->update([
-                    'id' => $nomor
-                ]);
-
-            $nomor++;
-        }
-    });
-
-    // ALTER TABLE diletakkan DI LUAR transaction
-    $table = (new AlatOutdoor)->getTable();
-
-    $nomor = AlatOutdoor::count() + 1;
-
-    DB::statement(
-        'ALTER TABLE ' . $table . ' AUTO_INCREMENT = ' . $nomor
-    );
-
-    return redirect()
-        ->back()
-        ->with('success', 'Alat berhasil dihapus dan ID diurutkan ulang!');
+        return redirect()
+            ->back()
+            ->with('success', 'Alat berhasil dihapus dan ID diurutkan ulang!');
     }
 }

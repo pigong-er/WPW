@@ -16,7 +16,7 @@ class KasirController extends Controller
      */
     public function index()
     {
-        $products = AlatOutdoor::where('is_active', 1)
+        $products = AlatOutdoor::query()
             ->get()
             ->map(function ($item) {
                 return [
