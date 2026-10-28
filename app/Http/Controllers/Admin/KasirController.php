@@ -8,6 +8,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class KasirController extends Controller
 {
@@ -140,5 +141,20 @@ class KasirController extends Controller
     {
         $transaction = Transaction::with('details', 'user')->findOrFail($id);
         return view('admin.nota-sewa', compact('transaction'));
+    }
+
+    /**
+     * Generate dan Unduh Invoice PDF.
+     */
+    public function cetakPdf($id)
+    {
+        // Ambil data transaksi beserta detail dan usernya
+        $transaction = Transaction::with('details', 'user')->findOrFail($id);
+
+        // Load view HTML dan ubah menjadi PDF
+        $pdf = Pdf::loadView('admin.nota-pdf', compact('transaction'));
+
+        // Unduh file PDF dengan nama spesifik berdasarkan nomor transaksi
+        return $pdf->download('Invoice_' . $transaction->transaction_number . '.pdf');
     }
 }

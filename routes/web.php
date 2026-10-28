@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\KasirController;
 use App\Http\Controllers\AuthController;
 
+// ROUTE PDF
+Route::get('/admin/kasir/nota/{id}/pdf', [App\Http\Controllers\Admin\KasirController::class, 'cetakPdf'])->name('admin.kasir.pdf');
 
 // ============================================
 // ROUTE FRONTEND (Halaman Publik)
